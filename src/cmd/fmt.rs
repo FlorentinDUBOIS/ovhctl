@@ -26,7 +26,8 @@ impl FromStr for Kind {
             _ => Err(format!(
                 "'{}' is not allowed, only 'short', 'wide', 'json' or 'yaml",
                 s
-            ).into()),
+            )
+            .into()),
         }
     }
 }

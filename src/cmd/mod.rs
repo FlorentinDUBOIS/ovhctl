@@ -109,7 +109,7 @@ impl Execute for DomainRecord {
                 not_in_cidrs,
             } => domain::sync_records(config, zone, output, not_in_cidrs).await,
             Self::Refresh { zone } => domain::refresh_records(config, zone).await,
-            Self::Delete { zone, id} => domain::delete_record(config, zone, id).await,
+            Self::Delete { zone, id } => domain::delete_record(config, zone, id).await,
         }
     }
 }
