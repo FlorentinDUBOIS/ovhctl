@@ -2,6 +2,7 @@
 //!
 //! This module provide structure to interact with the cloud api
 use std::error::Error;
+use std::net::IpAddr;
 
 use prettytable::{Cell, Row, Table};
 use serde::{Deserialize, Serialize};
@@ -91,7 +92,7 @@ impl Wide for Vec<Tenant> {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct IpAddress {
     #[serde(rename = "ip")]
-    pub ip: String,
+    pub ip: IpAddr,
     #[serde(rename = "type")]
     pub kind: String,
     #[serde(rename = "version")]
@@ -122,7 +123,7 @@ impl Short for Vec<IpAddress> {
 
             let row = Row::new(vec![
                 Cell::new(&address.network_id),
-                Cell::new(&address.ip),
+                Cell::new(&address.ip.to_string()),
                 Cell::new(&address.kind),
                 Cell::new(&format!("{}", address.version)),
                 Cell::new(&gateway_ip),
@@ -155,7 +156,7 @@ impl Wide for Vec<IpAddress> {
 
             let row = Row::new(vec![
                 Cell::new(&address.network_id),
-                Cell::new(&address.ip),
+                Cell::new(&address.ip.to_string()),
                 Cell::new(&address.kind),
                 Cell::new(&format!("{}", address.version)),
                 Cell::new(&gateway_ip),

@@ -2,6 +2,7 @@
 //!
 //! This module provide structure to interact with the domain api
 use std::error::Error;
+use std::net::IpAddr;
 
 use prettytable::{Cell, Row, Table};
 use serde::{Deserialize, Serialize};
@@ -204,6 +205,7 @@ pub async fn list_records(client: &Client, zone: &str) -> types::Result<Vec<Reco
         .await
         .map_err(|err| format!("could not retrieve records in zone '{}', {}", zone, err))?;
 
+    // todo(florentin.dubois): increase performance by using `futures::join_all`
     let mut zones = vec![];
     for id in ids {
         zones.push(
@@ -239,4 +241,14 @@ pub async fn refresh_records(client: &Client, zone: &str) -> types::Result<()> {
         .post(&format!("domain/zone/{}/refresh", zone), &"")
         .await
         .map_err(|err| format!("could not refresh domain records, {}", err))?)
+}
+
+pub fn contains(records: &[Record], ip: &IpAddr) -> Option<Record> {
+    for record in records {
+        if ip.to_string() == record.target {
+            return Some(record.to_owned());
+        }
+    }
+
+    None
 }

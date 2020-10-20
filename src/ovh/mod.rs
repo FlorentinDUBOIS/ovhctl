@@ -293,7 +293,7 @@ impl RestClient for Client {
             .map_err(|err| format!("could not execute request, {}", err))?;
 
         let status = response.status();
-        if !status.is_success() {
+        if !status.is_success() && 404 != status.as_u16() {
             let mut buf = vec![];
             aggregate(response).await?.reader().read_to_end(&mut buf)?;
 
