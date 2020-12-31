@@ -8,7 +8,7 @@ use std::str;
 use std::sync::Arc;
 
 use async_trait::async_trait;
-use bytes::buf::ext::BufExt;
+use bytes::Buf;
 use crypto::digest::Digest;
 use crypto::sha1::Sha1;
 use hyper::header::USER_AGENT;
