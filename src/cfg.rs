@@ -1,9 +1,11 @@
 //! # Configuration module
 //!
 //! This module provide utilities to parse configuration
-use std::convert::TryFrom;
-use std::error::Error;
-use std::path::PathBuf;
+use std::{
+    convert::TryFrom,
+    error::Error,
+    path::PathBuf
+};
 
 use config::{Config, Environment, File};
 use serde::Deserialize;

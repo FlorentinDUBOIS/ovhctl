@@ -1,21 +1,26 @@
 //! # OVHcloud module
 //!
 //! This module provide all necessary stuffs to communicate with https://api.ovh.com
-use std::convert::TryFrom;
-use std::error::Error;
-use std::io::Read;
-use std::str;
-use std::sync::Arc;
+use std::{
+    convert::TryFrom,
+    error::Error,
+    io::Read,
+    str,
+    sync::Arc,
+};
 
 use async_trait::async_trait;
 use bytes::Buf;
-use crypto::digest::Digest;
-use crypto::sha1::Sha1;
-use hyper::header::USER_AGENT;
-use hyper::{body::aggregate, body::Body, client::HttpConnector, Method, Request};
+use crypto::{
+    digest::Digest,
+    sha1::Sha1
+};
+use hyper::{
+    header::USER_AGENT,
+    body::aggregate, body::Body, client::HttpConnector, Method, Request,
+};
 use hyper_tls::HttpsConnector;
-use serde::de::DeserializeOwned;
-use serde::Serialize;
+use serde::{Serialize,de::DeserializeOwned};
 
 use crate::cfg::{Configuration, Ovh};
 

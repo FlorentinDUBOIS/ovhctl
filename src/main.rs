@@ -1,18 +1,22 @@
 //! # ovhctl
 //!
 //! A command line interface to improve our life at ovh
-use std::cmp::min;
-use std::convert::TryFrom;
-use std::error::Error;
-use std::sync::Arc;
+use std::{
+    cmp::min,
+    convert::TryFrom,
+    error::Error,
+    sync::Arc,
+};
 
 use slog::{o, Drain, Level, LevelFilter, Logger};
 use slog_async::Async;
 use slog_scope::{crit, debug, info, set_global_logger, warn, GlobalLoggerGuard as Guard};
 use slog_term::{FullFormat, TermDecorator};
 
-use crate::cfg::Configuration;
-use crate::cmd::{Args, Execute};
+use crate::{
+    cfg::Configuration,
+    cmd::{Args, Execute}
+};
 
 // library module should be declare first as it expose macros used by other modules
 // https://doc.rust-lang.org/1.2.0/book/macros.html#scoping-and-macro-import/export
