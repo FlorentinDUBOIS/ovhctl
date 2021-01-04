@@ -11,5 +11,5 @@
 **/*.rs.bk
 
 ### wctl ###
-# Configuration of wctl
+# Configuration of ovhctl
 config.toml
