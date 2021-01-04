@@ -156,7 +156,7 @@ pub enum LoadBalancer {
         output: Kind,
 
         /// Tenant on which we scope the search
-        #[structopt(short = "t", long = "tenant")]
+        #[structopt(name = "tenant")]
         tenant: String,
     },
 
@@ -168,7 +168,7 @@ pub enum LoadBalancer {
         output: Kind,
 
         /// Tenant on which we scope the search
-        #[structopt(short = "t", long = "tenant")]
+        #[structopt(name = "tenant")]
         tenant: String,
 
         /// Tenant on which we scope the search
@@ -184,7 +184,7 @@ pub enum LoadBalancer {
         output: Kind,
 
         /// Tenant on which we scope the search
-        #[structopt(short = "t", long = "tenant")]
+        #[structopt(name = "tenant")]
         tenant: String,
 
         /// Tenant on which we scope the search
@@ -416,7 +416,7 @@ async fn connect(config: Arc<Configuration>) -> Result<(), Box<dyn Error + Send 
 #[derive(StructOpt, Clone, Debug)]
 pub struct Args {
     /// Increase log verbosity
-    #[structopt(short = "v", parse(from_occurrences))]
+    #[structopt(short = "v", global = true, parse(from_occurrences))]
     pub verbose: usize,
 
     /// Validate the configuration
@@ -424,7 +424,7 @@ pub struct Args {
     pub check: bool,
 
     /// Path to the configuration file
-    #[structopt(short = "c", long = "config")]
+    #[structopt(short = "c", global = true, long = "config")]
     pub config: Option<PathBuf>,
 
     #[structopt(subcommand)]
