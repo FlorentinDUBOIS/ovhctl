@@ -1,7 +1,7 @@
 //! # Configuration module
 //!
 //! This module provide utilities to parse configuration
-use std::{convert::TryFrom, error::Error, path::PathBuf};
+use std::{convert::TryFrom, error::Error, path::PathBuf, env};
 
 use config::{Config, Environment, File};
 use serde::Deserialize;
@@ -46,7 +46,7 @@ impl Configuration {
                 File::with_name(&format!("/etc/{}/config", env!("CARGO_PKG_NAME"))).required(false),
             )
             .add_source(
-                File::with_name(&format!("{}/.{}", env!("HOME"), env!("CARGO_PKG_NAME")))
+                File::with_name(&format!("{}/.{}", env::var("HOME")?, env!("CARGO_PKG_NAME")))
                     .required(false),
             )
             .add_source(File::with_name("config").required(false))
