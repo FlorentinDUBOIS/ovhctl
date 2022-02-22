@@ -9,7 +9,7 @@ use pbr::ProgressBar;
 use slog_scope::info;
 
 use crate::cfg::Configuration;
-use crate::cmd::fmt::{Formatter, Kind, Short, Wide, JSON, YAML};
+use crate::cmd::fmt::{Formatter, Kind, Short, Wide, Json, Yaml};
 use crate::lib::net;
 use crate::lib::types::Result;
 use crate::ovh::cloud::{list_instances, list_tenants};
@@ -30,8 +30,8 @@ pub async fn list_zones(config: Arc<Configuration>, output: &Kind) -> Result<()>
     let o = match output {
         Kind::Short => zones.short()?,
         Kind::Wide => zones.wide()?,
-        Kind::JSON => formatter.json()?,
-        Kind::YAML => formatter.yaml()?,
+        Kind::Json => formatter.json()?,
+        Kind::Yaml => formatter.yaml()?,
     };
 
     println!("{}", o);
@@ -52,8 +52,8 @@ pub async fn list_records(config: Arc<Configuration>, zone: &str, output: &Kind)
     let o = match output {
         Kind::Short => records.short()?,
         Kind::Wide => records.wide()?,
-        Kind::JSON => formatter.json()?,
-        Kind::YAML => formatter.yaml()?,
+        Kind::Json => formatter.json()?,
+        Kind::Yaml => formatter.yaml()?,
     };
 
     println!("{}", o);
@@ -222,8 +222,8 @@ pub async fn sync_records(
     let o = match output {
         Kind::Short => records.short()?,
         Kind::Wide => records.wide()?,
-        Kind::JSON => formatter.json()?,
-        Kind::YAML => formatter.yaml()?,
+        Kind::Json => formatter.json()?,
+        Kind::Yaml => formatter.yaml()?,
     };
 
     println!("{}", o);
@@ -249,5 +249,5 @@ pub async fn delete_record(config: Arc<Configuration>, zone: &str, id: &i64) -> 
         )
     })?);
 
-    Ok(domain::delete_record(&client, zone, &id).await?)
+    Ok(domain::delete_record(&client, zone, id).await?)
 }

@@ -5,7 +5,7 @@ use std::convert::TryFrom;
 use std::sync::Arc;
 
 use crate::cfg::Configuration;
-use crate::cmd::fmt::{Formatter, Kind, Short, Wide, JSON, YAML};
+use crate::cmd::fmt::{Formatter, Kind, Short, Wide, Json, Yaml};
 use crate::lib::types::Result;
 use crate::ovh::cloud;
 use crate::ovh::{Client, ClientConfiguration};
@@ -23,8 +23,8 @@ pub async fn list_tenants(config: Arc<Configuration>, output: &Kind) -> Result<(
     let o = match output {
         Kind::Short => tenants.short()?,
         Kind::Wide => tenants.wide()?,
-        Kind::JSON => formatter.json()?,
-        Kind::YAML => formatter.yaml()?,
+        Kind::Json => formatter.json()?,
+        Kind::Yaml => formatter.yaml()?,
     };
 
     println!("{}", o);
@@ -45,8 +45,8 @@ pub async fn list_instances(config: Arc<Configuration>, tenant: &str, output: &K
     let o = match output {
         Kind::Short => instances.short()?,
         Kind::Wide => instances.wide()?,
-        Kind::JSON => formatter.json()?,
-        Kind::YAML => formatter.yaml()?,
+        Kind::Json => formatter.json()?,
+        Kind::Yaml => formatter.yaml()?,
     };
 
     println!("{}", o);

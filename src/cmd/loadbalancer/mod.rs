@@ -5,7 +5,7 @@ use std::convert::TryFrom;
 use std::sync::Arc;
 
 use crate::cfg::Configuration;
-use crate::cmd::fmt::{Formatter, Kind, Short, Wide, JSON, YAML};
+use crate::cmd::fmt::{Formatter, Kind, Short, Wide, Json, Yaml};
 use crate::lib::types;
 use crate::ovh::cloud::loadbalancer;
 use crate::ovh::{Client, ClientConfiguration};
@@ -23,8 +23,8 @@ pub async fn list(config: Arc<Configuration>, output: &Kind, tenant: &str) -> ty
     let o = match output {
         Kind::Short => loadbalancers.short()?,
         Kind::Wide => loadbalancers.wide()?,
-        Kind::JSON => formatter.json()?,
-        Kind::YAML => formatter.yaml()?,
+        Kind::Json => formatter.json()?,
+        Kind::Yaml => formatter.yaml()?,
     };
 
     println!("{}", o);
@@ -50,8 +50,8 @@ pub async fn create(
     let o = match output {
         Kind::Short => loadbalancers.short()?,
         Kind::Wide => loadbalancers.wide()?,
-        Kind::JSON => formatter.json()?,
-        Kind::YAML => formatter.yaml()?,
+        Kind::Json => formatter.json()?,
+        Kind::Yaml => formatter.yaml()?,
     };
 
     println!("{}", o);
@@ -79,8 +79,8 @@ pub async fn delete(
     let o = match output {
         Kind::Short => loadbalancers.short()?,
         Kind::Wide => loadbalancers.wide()?,
-        Kind::JSON => formatter.json()?,
-        Kind::YAML => formatter.yaml()?,
+        Kind::Json => formatter.json()?,
+        Kind::Yaml => formatter.yaml()?,
     };
 
     println!("{}", o);

@@ -207,7 +207,7 @@ impl Short for Vec<Instance> {
                 Cell::new(&instance.name),
                 Cell::new(&instance.region),
                 Cell::new(&instance.status),
-                Cell::new(&instance.plan_code.trim_end_matches(".consumption")),
+                Cell::new(instance.plan_code.trim_end_matches(".consumption")),
             ]);
 
             rows.push(row);

@@ -257,7 +257,7 @@ impl Execute for Instance {
 
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
-            Self::List { tenant, output } => cloud::list_instances(config, &tenant, output).await,
+            Self::List { tenant, output } => cloud::list_instances(config, tenant, output).await,
         }
     }
 }
@@ -309,7 +309,7 @@ impl Execute for Server {
 
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
-            Self::List { output } => server::list_servers(config, &output).await,
+            Self::List { output } => server::list_servers(config, output).await,
         }
     }
 }
