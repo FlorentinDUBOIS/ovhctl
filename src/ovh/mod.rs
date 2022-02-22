@@ -1,26 +1,16 @@
 //! # OVHcloud module
 //!
 //! This module provide all necessary stuffs to communicate with https://api.ovh.com
-use std::{
-    convert::TryFrom,
-    error::Error,
-    io::Read,
-    str,
-    sync::Arc,
-};
+use std::{convert::TryFrom, error::Error, io::Read, str, sync::Arc};
 
 use async_trait::async_trait;
 use bytes::Buf;
-use crypto::{
-    digest::Digest,
-    sha1::Sha1
-};
+use crypto::{digest::Digest, sha1::Sha1};
 use hyper::{
-    header::USER_AGENT,
-    body::aggregate, body::Body, client::HttpConnector, Method, Request,
+    body::aggregate, body::Body, client::HttpConnector, header::USER_AGENT, Method, Request,
 };
 use hyper_tls::HttpsConnector;
-use serde::{Serialize,de::DeserializeOwned};
+use serde::{de::DeserializeOwned, Serialize};
 
 use crate::cfg::{Configuration, Ovh};
 
@@ -61,7 +51,7 @@ impl TryFrom<Arc<Configuration>> for ClientConfiguration {
     type Error = Box<dyn Error + Send + Sync>;
 
     fn try_from(config: Arc<Configuration>) -> Result<Self, Self::Error> {
-        Ok(Self::try_from(config.ovh.to_owned())?)
+        Self::try_from(config.ovh.to_owned())
     }
 }
 

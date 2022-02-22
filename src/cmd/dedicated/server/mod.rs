@@ -5,7 +5,7 @@ use std::convert::TryFrom;
 use std::sync::Arc;
 
 use crate::cfg::Configuration;
-use crate::cmd::fmt::{Formatter, Kind, Short, Wide, JSON, YAML};
+use crate::cmd::fmt::{Formatter, Kind, Short, Wide, Json, Yaml};
 use crate::lib::types;
 use crate::ovh::dedicated::server;
 use crate::ovh::{Client, ClientConfiguration};
@@ -23,8 +23,8 @@ pub async fn list_servers(config: Arc<Configuration>, output: &Kind) -> types::R
     let o = match output {
         Kind::Short => servers.short()?,
         Kind::Wide => servers.wide()?,
-        Kind::JSON => formatter.json()?,
-        Kind::YAML => formatter.yaml()?,
+        Kind::Json => formatter.json()?,
+        Kind::Yaml => formatter.yaml()?,
     };
 
     println!("{}", o);

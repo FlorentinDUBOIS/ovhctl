@@ -10,8 +10,8 @@ use serde::Serialize;
 pub enum Kind {
     Short,
     Wide,
-    JSON,
-    YAML,
+    Json,
+    Yaml,
 }
 
 impl FromStr for Kind {
@@ -21,8 +21,8 @@ impl FromStr for Kind {
         match s {
             "short" => Ok(Self::Short),
             "wide" => Ok(Self::Wide),
-            "json" => Ok(Self::JSON),
-            "yaml" => Ok(Self::YAML),
+            "json" => Ok(Self::Json),
+            "yaml" => Ok(Self::Yaml),
             _ => Err(format!(
                 "'{}' is not allowed, only 'short', 'wide', 'json' or 'yaml",
                 s
@@ -32,13 +32,13 @@ impl FromStr for Kind {
     }
 }
 
-pub trait JSON {
+pub trait Json {
     type Error;
 
     fn json(&self) -> Result<String, Self::Error>;
 }
 
-pub trait YAML {
+pub trait Yaml {
     type Error;
 
     fn yaml(&self) -> Result<String, Self::Error>;
@@ -72,7 +72,7 @@ where
     }
 }
 
-impl<T> JSON for Formatter<T>
+impl<T> Json for Formatter<T>
 where
     T: Sized + Serialize + Short + Wide,
 {
@@ -84,7 +84,7 @@ where
     }
 }
 
-impl<T> YAML for Formatter<T>
+impl<T> Yaml for Formatter<T>
 where
     T: Sized + Serialize + Short + Wide,
 {
