@@ -5,7 +5,7 @@ use std::convert::TryFrom;
 use std::sync::Arc;
 
 use crate::cfg::Configuration;
-use crate::cmd::fmt::{Formatter, Kind, Short, Wide, Json, Yaml};
+use crate::cmd::fmt::{Formatter, Json, Kind, Short, Wide, Yaml};
 use crate::lib::types::Result;
 use crate::ovh::cloud;
 use crate::ovh::{Client, ClientConfiguration};
