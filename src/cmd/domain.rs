@@ -9,7 +9,7 @@ use pbr::ProgressBar;
 use slog_scope::info;
 
 use crate::cfg::Configuration;
-use crate::cmd::fmt::{Formatter, Kind, Short, Wide, Json, Yaml};
+use crate::cmd::fmt::{Formatter, Json, Kind, Short, Wide, Yaml};
 use crate::lib::net;
 use crate::lib::types::Result;
 use crate::ovh::cloud::{list_instances, list_tenants};
