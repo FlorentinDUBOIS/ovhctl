@@ -7,12 +7,12 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-async-trait = "^0.1.52"
+async-trait = "^0.1.53"
 bytes = "^1.1.0"
 config = "^0.12.0"
 chrono = "^0.4.19"
 futures = "^0.3.21"
-hyper = { version = "^0.14.17", features = ["full"] }
+hyper = { version = "^0.14.18", features = ["full"] }
 hyper-tls = "^0.5.0"
 ipnetwork = "^0.18.0"
 paw = "^1.0.0"
