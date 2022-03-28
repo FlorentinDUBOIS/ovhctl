@@ -1,8 +1,10 @@
 [package]
 name = "ovhctl"
-version = "0.1.4"
+description = "A command line interface to interact with the ovhcloud api"
+version = "0.1.5"
 authors = ["Florentin Dubois <florentin.dubois@hey.com>"]
 edition = "2021"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
