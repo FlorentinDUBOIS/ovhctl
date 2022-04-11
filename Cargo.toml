@@ -4,7 +4,10 @@ description = "A command line interface to interact with the ovhcloud api"
 version = "0.1.6"
 authors = ["Florentin Dubois <florentin.dubois@hey.com>"]
 edition = "2021"
+rust-version = "1.60.0"
+repository = "https://github.com/FlorentinDUBOIS/ovhctl"
 license = "MIT"
+keywords = ["OVHcloud", "rust", "cli"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
