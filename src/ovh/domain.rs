@@ -225,15 +225,15 @@ pub async fn list_records(client: &Client, zone: &str) -> types::Result<Vec<Reco
 }
 
 pub async fn create_record(client: &Client, zone: &str, record: &Record) -> types::Result<Record> {
-    Ok(client
+    client
         .post(&format!("domain/zone/{}/record", zone), record)
-        .await?)
+        .await
 }
 
 pub async fn delete_record(client: &Client, zone: &str, id: &i64) -> types::Result<()> {
-    Ok(client
+    client
         .delete(&format!("domain/zone/{}/record/{}", zone, id))
-        .await?)
+        .await
 }
 
 pub async fn refresh_records(client: &Client, zone: &str) -> types::Result<()> {
