@@ -11,7 +11,7 @@ license = "MIT"
 [dependencies]
 async-trait = "^0.1.53"
 bytes = "^1.1.0"
-config = "^0.12.0"
+config = "^0.13.0"
 chrono = "^0.4.19"
 futures = "^0.3.21"
 hyper = { version = "^0.14.18", features = ["full"] }

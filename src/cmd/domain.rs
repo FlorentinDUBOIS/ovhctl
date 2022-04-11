@@ -238,7 +238,7 @@ pub async fn refresh_records(config: Arc<Configuration>, zone: &str) -> Result<(
         )
     })?);
 
-    Ok(domain::refresh_records(&client, zone).await?)
+    domain::refresh_records(&client, zone).await
 }
 
 pub async fn delete_record(config: Arc<Configuration>, zone: &str, id: &i64) -> Result<()> {
@@ -249,5 +249,5 @@ pub async fn delete_record(config: Arc<Configuration>, zone: &str, id: &i64) -> 
         )
     })?);
 
-    Ok(domain::delete_record(&client, zone, id).await?)
+    domain::delete_record(&client, zone, id).await
 }
