@@ -1,7 +1,7 @@
 [package]
 name = "ovhctl"
 description = "A command line interface to interact with the ovhcloud api"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Florentin Dubois <florentin.dubois@hey.com>"]
 edition = "2021"
 rust-version = "1.60.0"
