@@ -32,6 +32,7 @@ pub struct Tenant {
 impl Short for Vec<Tenant> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn short(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Tenant"),
@@ -62,6 +63,7 @@ impl Short for Vec<Tenant> {
 impl Wide for Vec<Tenant> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn wide(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Tenant"),
@@ -106,6 +108,7 @@ pub struct IpAddress {
 impl Short for Vec<IpAddress> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn short(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Identifier"),
@@ -139,6 +142,7 @@ impl Short for Vec<IpAddress> {
 impl Wide for Vec<IpAddress> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn wide(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Identifier"),
@@ -192,6 +196,7 @@ pub struct Instance {
 impl Short for Vec<Instance> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn short(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Identifier"),
@@ -220,6 +225,7 @@ impl Short for Vec<Instance> {
 impl Wide for Vec<Instance> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn wide(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Identifier"),
@@ -249,6 +255,7 @@ impl Wide for Vec<Instance> {
     }
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn list_tenants(client: &Client) -> types::Result<Vec<Tenant>> {
     let ids: Vec<String> = client
         .get("cloud/project")
@@ -268,6 +275,7 @@ pub async fn list_tenants(client: &Client) -> types::Result<Vec<Tenant>> {
     Ok(tenants)
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn list_instances(client: &Client, tenant: &str) -> types::Result<Vec<Instance>> {
     Ok(client
         .get(&format!("cloud/project/{}/instance", tenant))

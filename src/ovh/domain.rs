@@ -26,6 +26,7 @@ pub struct Zone {
 impl Short for Vec<Zone> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn short(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Name"),
@@ -52,6 +53,7 @@ impl Short for Vec<Zone> {
 impl Wide for Vec<Zone> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn wide(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Name"),
@@ -92,6 +94,7 @@ pub struct Record {
 }
 
 impl PartialEq for Record {
+    #[tracing::instrument]
     fn eq(&self, other: &Self) -> bool {
         self.field_type == other.field_type
             && self.sub_domain == other.sub_domain
@@ -103,6 +106,7 @@ impl PartialEq for Record {
 impl Short for Vec<Record> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn short(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Identifier"),
@@ -143,6 +147,7 @@ impl Short for Vec<Record> {
 impl Wide for Vec<Record> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn wide(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Identifier"),
@@ -180,6 +185,7 @@ impl Wide for Vec<Record> {
     }
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn list_zones(client: &Client) -> types::Result<Vec<Zone>> {
     let ids: Vec<String> = client
         .get("domain/zone")
@@ -199,6 +205,7 @@ pub async fn list_zones(client: &Client) -> types::Result<Vec<Zone>> {
     Ok(zones)
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn list_records(client: &Client, zone: &str) -> types::Result<Vec<Record>> {
     let ids: Vec<i64> = client
         .get(&format!("domain/zone/{}/record", zone))
@@ -224,18 +231,21 @@ pub async fn list_records(client: &Client, zone: &str) -> types::Result<Vec<Reco
     Ok(zones)
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn create_record(client: &Client, zone: &str, record: &Record) -> types::Result<Record> {
     client
         .post(&format!("domain/zone/{}/record", zone), record)
         .await
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn delete_record(client: &Client, zone: &str, id: &i64) -> types::Result<()> {
     client
         .delete(&format!("domain/zone/{}/record/{}", zone, id))
         .await
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn refresh_records(client: &Client, zone: &str) -> types::Result<()> {
     Ok(client
         .post(&format!("domain/zone/{}/refresh", zone), &"")
@@ -243,6 +253,7 @@ pub async fn refresh_records(client: &Client, zone: &str) -> types::Result<()> {
         .map_err(|err| format!("could not refresh domain records, {}", err))?)
 }
 
+#[tracing::instrument]
 pub fn contains(records: &[Record], ip: &IpAddr) -> Option<Record> {
     for record in records {
         if ip.to_string() == record.target {

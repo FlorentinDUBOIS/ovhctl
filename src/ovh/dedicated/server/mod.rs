@@ -37,6 +37,7 @@ pub struct Server {
 impl Short for Vec<Server> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn short(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Identifier"),
@@ -63,6 +64,7 @@ impl Short for Vec<Server> {
 impl Wide for Vec<Server> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn wide(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Identifier"),
@@ -96,6 +98,7 @@ impl Wide for Vec<Server> {
     }
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn list_servers(client: &Client) -> types::Result<Vec<Server>> {
     let ids: Vec<String> = client
         .get("dedicated/server")

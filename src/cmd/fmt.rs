@@ -17,6 +17,7 @@ pub enum Kind {
 impl FromStr for Kind {
     type Err = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "short" => Ok(Self::Short),
@@ -67,6 +68,7 @@ impl<T> From<T> for Formatter<T>
 where
     T: Sized + Serialize + Short + Wide,
 {
+    #[tracing::instrument(skip(inner))]
     fn from(inner: T) -> Self {
         Self { inner }
     }
@@ -78,6 +80,7 @@ where
 {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument(skip(self))]
     fn json(&self) -> Result<String, Self::Error> {
         Ok(serde_json::to_string_pretty(&self.inner)
             .map_err(|err| format!("could not serialize in json, {}", err))?)
@@ -90,6 +93,7 @@ where
 {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument(skip(self))]
     fn yaml(&self) -> Result<String, Self::Error> {
         Ok(serde_yaml::to_string(&self.inner)
             .map_err(|err| format!("could not serialize in yaml, {}", err))?)
@@ -103,6 +107,7 @@ where
 {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument(skip(self))]
     fn short(&self) -> Result<String, Self::Error> {
         Ok(self
             .inner
@@ -118,6 +123,7 @@ where
 {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument(skip(self))]
     fn wide(&self) -> Result<String, Self::Error> {
         Ok(self
             .inner

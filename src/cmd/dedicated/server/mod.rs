@@ -10,6 +10,7 @@ use crate::lib::types;
 use crate::ovh::dedicated::server;
 use crate::ovh::{Client, ClientConfiguration};
 
+#[tracing::instrument]
 pub async fn list_servers(config: Arc<Configuration>, output: &Kind) -> types::Result<()> {
     let client = Client::from(ClientConfiguration::try_from(config).map_err(|err| {
         format!(

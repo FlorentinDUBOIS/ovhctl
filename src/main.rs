@@ -1,12 +1,9 @@
 //! # ovhctl
 //!
 //! A command line interface to improve our life at ovh
-use std::{cmp::min, convert::TryFrom, error::Error, sync::Arc};
+use std::{convert::TryFrom, error::Error as StdError, sync::Arc};
 
-use slog::{o, Drain, Level, LevelFilter, Logger};
-use slog_async::Async;
-use slog_scope::{crit, debug, info, set_global_logger, warn, GlobalLoggerGuard as Guard};
-use slog_term::{FullFormat, TermDecorator};
+use tracing::{debug, error, info, warn};
 
 use crate::{
     cfg::Configuration,
@@ -19,28 +16,38 @@ use crate::{
 mod lib;
 mod cfg;
 mod cmd;
+pub mod logging;
 mod ovh;
 
-#[inline]
-fn init(verbose: usize) -> Guard {
-    let level = min(
-        Level::Trace.as_usize(),
-        Level::Critical.as_usize() + verbose,
-    );
-    let level = Level::from_usize(level).unwrap_or(Level::Trace);
+// -----------------------------------------------------------------------------
+// Error enumeration
 
-    let decorator = TermDecorator::new().build();
-    let drain = FullFormat::new(decorator).build().fuse();
-    let drain = Async::new(drain).build().fuse();
-    let drain = LevelFilter::new(drain, level).fuse();
-
-    set_global_logger(Logger::root(drain, o!()))
+#[derive(thiserror::Error, Debug)]
+pub enum Error {
+    #[error("failed to initialise logging system, {0}")]
+    LoggingSystem(logging::Error),
+    #[error("failed to load configuration, {0}")]
+    Configuration(Box<dyn StdError + Send + Sync>),
+    #[error("failed to execute command, {0}")]
+    Comand(Box<dyn StdError + Send + Sync>),
+    #[error("failed to parse arguments, {0}")]
+    ParseArgs(std::io::Error),
 }
+
+impl From<std::io::Error> for Error {
+    fn from(err: std::io::Error) -> Self {
+        Self::ParseArgs(err)
+    }
+}
+
+// -----------------------------------------------------------------------------
+// entrypoint
 
 #[paw::main]
 #[tokio::main]
-async fn main(args: Args) -> Result<(), Box<dyn Error>> {
-    let _guard = init(args.verbose);
+#[tracing::instrument]
+async fn main(args: Args) -> Result<(), Error> {
+    logging::initialize(args.verbose).map_err(Error::LoggingSystem)?;
     let config = match args.config.to_owned() {
         Some(path) => Configuration::try_from(path),
         None => Configuration::try_new(),
@@ -49,8 +56,8 @@ async fn main(args: Args) -> Result<(), Box<dyn Error>> {
     let config = match config {
         Ok(config) => Arc::new(config),
         Err(err) => {
-            crit!("could not load configuration"; "error" => err.to_string());
-            return Err(err);
+            error!("could not load configuration, {}", err);
+            return Err(Error::Configuration(err));
         }
     };
 
@@ -70,8 +77,8 @@ async fn main(args: Args) -> Result<(), Box<dyn Error>> {
 
     if let Some(cmd) = args.cmd {
         if let Err(err) = cmd.execute(config).await {
-            crit!("could not execute command"; "error" => err.to_string());
-            return Err(err);
+            error!("could not execute command, {}", err);
+            return Err(Error::Comand(err));
         }
     }
 

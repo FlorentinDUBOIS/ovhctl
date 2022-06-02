@@ -10,6 +10,7 @@ use crate::lib::types::Result;
 use crate::ovh::cloud;
 use crate::ovh::{Client, ClientConfiguration};
 
+#[tracing::instrument]
 pub async fn list_tenants(config: Arc<Configuration>, output: &Kind) -> Result<()> {
     let client = Client::from(ClientConfiguration::try_from(config).map_err(|err| {
         format!(
@@ -32,6 +33,7 @@ pub async fn list_tenants(config: Arc<Configuration>, output: &Kind) -> Result<(
     Ok(())
 }
 
+#[tracing::instrument]
 pub async fn list_instances(config: Arc<Configuration>, tenant: &str, output: &Kind) -> Result<()> {
     let client = Client::from(ClientConfiguration::try_from(config).map_err(|err| {
         format!(
