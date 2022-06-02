@@ -6,7 +6,7 @@ use std::sync::Arc;
 
 use ipnetwork::IpNetwork;
 use pbr::ProgressBar;
-use slog_scope::info;
+use tracing::info;
 
 use crate::cfg::Configuration;
 use crate::cmd::fmt::{Formatter, Json, Kind, Short, Wide, Yaml};
@@ -17,6 +17,7 @@ use crate::ovh::domain::Record;
 use crate::ovh::{domain, RestClient};
 use crate::ovh::{Client, ClientConfiguration};
 
+#[tracing::instrument]
 pub async fn list_zones(config: Arc<Configuration>, output: &Kind) -> Result<()> {
     let client = Client::from(ClientConfiguration::try_from(config).map_err(|err| {
         format!(
@@ -39,6 +40,7 @@ pub async fn list_zones(config: Arc<Configuration>, output: &Kind) -> Result<()>
     Ok(())
 }
 
+#[tracing::instrument]
 pub async fn list_records(config: Arc<Configuration>, zone: &str, output: &Kind) -> Result<()> {
     let client = Client::from(ClientConfiguration::try_from(config).map_err(|err| {
         format!(
@@ -62,6 +64,7 @@ pub async fn list_records(config: Arc<Configuration>, zone: &str, output: &Kind)
 }
 
 // todo(florentin.dubois): handle dedicated servers
+#[tracing::instrument]
 pub async fn sync_records(
     config: Arc<Configuration>,
     zone: &str,
@@ -93,7 +96,7 @@ pub async fn sync_records(
     // retrieve records
 
     // todo(florentin.dubois): use the domains::list_records function once optimized
-    info!("retrieve dns records"; "zone" => zone);
+    info!("retrieve dns records '{}'", zone);
     let ids: Vec<i64> = client
         .get(&format!("domain/zone/{}/record", zone))
         .await
@@ -122,7 +125,11 @@ pub async fn sync_records(
     // -------------------------------------------------------------------------
     // compute records diff
 
-    info!("compute diff to apply"; "instances" => instances.len(), "records" => records.len());
+    info!(
+        "compute diff to apply, instances: {}, records: {}",
+        instances.len(),
+        records.len()
+    );
     let mut pb = ProgressBar::new(instances.len() as u64);
     let mut records_to_create = vec![];
     let mut records_to_delete = vec![];
@@ -183,7 +190,11 @@ pub async fn sync_records(
     // -------------------------------------------------------------------------
     // Apply diff
 
-    info!("apply diff"; "create" => records_to_create.len(), "delete" => records_to_delete.len());
+    info!(
+        "apply diff, create: {}, delete: {}",
+        records_to_create.len(),
+        records_to_delete.len()
+    );
     let mut pb = ProgressBar::new((records_to_delete.len() + records_to_create.len()) as u64);
     for record in records_to_delete {
         let id = match record.id {
@@ -230,6 +241,7 @@ pub async fn sync_records(
     Ok(())
 }
 
+#[tracing::instrument]
 pub async fn refresh_records(config: Arc<Configuration>, zone: &str) -> Result<()> {
     let client = Client::from(ClientConfiguration::try_from(config).map_err(|err| {
         format!(
@@ -241,6 +253,7 @@ pub async fn refresh_records(config: Arc<Configuration>, zone: &str) -> Result<(
     domain::refresh_records(&client, zone).await
 }
 
+#[tracing::instrument]
 pub async fn delete_record(config: Arc<Configuration>, zone: &str, id: &i64) -> Result<()> {
     let client = Client::from(ClientConfiguration::try_from(config).map_err(|err| {
         format!(

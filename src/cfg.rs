@@ -25,8 +25,9 @@ pub struct Configuration {
 }
 
 impl TryFrom<PathBuf> for Configuration {
-    type Error = Box<dyn Error>;
+    type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn try_from(path: PathBuf) -> Result<Self, Self::Error> {
         Config::builder()
             .set_default("ovh.endpoint", "https://eu.api.ovh.com/1.0")?
@@ -39,7 +40,8 @@ impl TryFrom<PathBuf> for Configuration {
 }
 
 impl Configuration {
-    pub fn try_new() -> Result<Self, Box<dyn Error>> {
+    #[tracing::instrument]
+    pub fn try_new() -> Result<Self, Box<dyn Error + Send + Sync>> {
         Config::builder()
             .set_default("ovh.endpoint", "https://eu.api.ovh.com/1.0")?
             .add_source(

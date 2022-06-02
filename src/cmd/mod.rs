@@ -37,6 +37,7 @@ pub enum DomainZone {
 impl Execute for DomainZone {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
             Self::List { output } => domain::list_zones(config, output).await,
@@ -100,6 +101,7 @@ pub enum DomainRecord {
 impl Execute for DomainRecord {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
             Self::List { zone, output } => domain::list_records(config, zone, output).await,
@@ -130,6 +132,7 @@ pub enum Domain {
 impl Execute for Domain {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
             Self::Zone(cmd) => cmd.execute(config).await,
@@ -197,6 +200,7 @@ pub enum LoadBalancer {
 impl Execute for LoadBalancer {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
             Self::List { output, tenant } => loadbalancer::list(config, output, tenant).await,
@@ -228,6 +232,7 @@ pub enum Tenant {
 impl Execute for Tenant {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
             Self::List { output } => cloud::list_tenants(config, output).await,
@@ -255,6 +260,7 @@ pub enum Instance {
 impl Execute for Instance {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
             Self::List { tenant, output } => cloud::list_instances(config, tenant, output).await,
@@ -282,6 +288,7 @@ pub enum Cloud {
 impl Execute for Cloud {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
             Self::Tenant(cmd) => cmd.execute(config).await,
@@ -307,6 +314,7 @@ pub enum Server {
 impl Execute for Server {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
             Self::List { output } => server::list_servers(config, output).await,
@@ -326,6 +334,7 @@ pub enum Dedicated {
 impl Execute for Dedicated {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
             Self::Server(cmd) => cmd.execute(config).await,
@@ -357,6 +366,7 @@ pub enum Command {
 impl Execute for Command {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     async fn execute(&self, config: Arc<Configuration>) -> Result<(), Self::Error> {
         match self {
             Self::Dedicated(cmd) => cmd.execute(config).await,
@@ -367,6 +377,7 @@ impl Execute for Command {
     }
 }
 
+#[tracing::instrument]
 async fn connect(config: Arc<Configuration>) -> Result<(), Box<dyn Error + Send + Sync>> {
     let client = Client::from(ClientConfiguration::try_from(config).map_err(|err| {
         format!(

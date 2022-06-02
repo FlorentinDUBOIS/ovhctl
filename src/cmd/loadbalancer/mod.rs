@@ -10,6 +10,7 @@ use crate::lib::types;
 use crate::ovh::cloud::loadbalancer;
 use crate::ovh::{Client, ClientConfiguration};
 
+#[tracing::instrument]
 pub async fn list(config: Arc<Configuration>, output: &Kind, tenant: &str) -> types::Result<()> {
     let client = Client::from(ClientConfiguration::try_from(config).map_err(|err| {
         format!(
@@ -32,6 +33,7 @@ pub async fn list(config: Arc<Configuration>, output: &Kind, tenant: &str) -> ty
     Ok(())
 }
 
+#[tracing::instrument]
 pub async fn create(
     config: Arc<Configuration>,
     output: &Kind,
@@ -59,6 +61,7 @@ pub async fn create(
     Ok(())
 }
 
+#[tracing::instrument]
 pub async fn delete(
     config: Arc<Configuration>,
     output: &Kind,

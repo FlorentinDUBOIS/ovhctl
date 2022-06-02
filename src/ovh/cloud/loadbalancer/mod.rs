@@ -47,6 +47,7 @@ pub struct LoadBalancer {
 impl Short for Vec<LoadBalancer> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn short(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Identifier"),
@@ -92,6 +93,7 @@ impl Short for Vec<LoadBalancer> {
 impl Wide for Vec<LoadBalancer> {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn wide(&self) -> Result<String, Self::Error> {
         let mut rows = vec![Row::new(vec![
             Cell::new("Identifier"),
@@ -152,6 +154,7 @@ pub struct LoadBalancerCreation {
 }
 
 impl From<&str> for LoadBalancerCreation {
+    #[tracing::instrument]
     fn from(region: &str) -> Self {
         Self {
             region: region.to_string(),
@@ -160,11 +163,13 @@ impl From<&str> for LoadBalancerCreation {
 }
 
 impl From<String> for LoadBalancerCreation {
+    #[tracing::instrument]
     fn from(region: String) -> Self {
         Self { region }
     }
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn list(client: &Client, tenant: &str) -> types::Result<Vec<LoadBalancer>> {
     let ids: Vec<String> = client
         .get(&format!("cloud/project/{}/loadbalancer", tenant))
@@ -194,6 +199,7 @@ pub async fn list(client: &Client, tenant: &str) -> types::Result<Vec<LoadBalanc
     Ok(loadbalancers)
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn create(
     client: &Client,
     tenant: &str,
@@ -205,6 +211,7 @@ pub async fn create(
         .map_err(|err| format!("could not create loadbalancer, {}", err))?)
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn delete(client: &Client, tenant: &str, id: &str) -> types::Result<()> {
     Ok(client
         .delete(&format!("cloud/project/{}/loadbalancer/{}", tenant, id))

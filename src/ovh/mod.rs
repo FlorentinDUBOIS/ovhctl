@@ -35,6 +35,7 @@ pub struct ClientConfiguration {
 impl TryFrom<Ovh> for ClientConfiguration {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn try_from(config: Ovh) -> Result<Self, Self::Error> {
         Ok(Self {
             endpoint: config.endpoint,
@@ -50,6 +51,7 @@ impl TryFrom<Ovh> for ClientConfiguration {
 impl TryFrom<Arc<Configuration>> for ClientConfiguration {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument]
     fn try_from(config: Arc<Configuration>) -> Result<Self, Self::Error> {
         Self::try_from(config.ovh.to_owned())
     }
@@ -61,6 +63,7 @@ pub struct Client {
 }
 
 impl From<ClientConfiguration> for Client {
+    #[tracing::instrument]
     fn from(config: ClientConfiguration) -> Self {
         let client = hyper::Client::builder().build(HttpsConnector::new());
 
@@ -96,6 +99,7 @@ pub trait RestClient {
 impl RestClient for Client {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument(skip(self))]
     async fn get<T>(&self, path: &str) -> Result<T, Self::Error>
     where
         T: Sized + DeserializeOwned + Send + Sync,
@@ -141,6 +145,7 @@ impl RestClient for Client {
             .map_err(|err| format!("could not deserialize the payload, {}", err))?)
     }
 
+    #[tracing::instrument(skip(self, obj))]
     async fn post<T, U>(&self, path: &str, obj: &T) -> Result<U, Self::Error>
     where
         T: Sized + Serialize + Send + Sync,
@@ -201,6 +206,7 @@ impl RestClient for Client {
             .map_err(|err| format!("could not deserialize the payload, {}", err))?)
     }
 
+    #[tracing::instrument(skip(self, obj))]
     async fn put<T, U>(&self, path: &str, obj: &T) -> Result<U, Self::Error>
     where
         T: Sized + Serialize + Send + Sync,
@@ -263,6 +269,7 @@ impl RestClient for Client {
             .map_err(|err| format!("could not deserialize the payload, {}", err))?)
     }
 
+    #[tracing::instrument(skip(self))]
     async fn delete(&self, path: &str) -> Result<(), Self::Error> {
         let timestamp = chrono::offset::Utc::now().timestamp();
         let uri = format!("{}/{}", self.config.endpoint.to_owned(), path);
@@ -323,6 +330,7 @@ pub trait UnauthenticatedRestClient {
 impl UnauthenticatedRestClient for Client {
     type Error = Box<dyn Error + Send + Sync>;
 
+    #[tracing::instrument(skip(self))]
     async fn get_unauthenticated<T>(&self, path: &str) -> Result<T, Self::Error>
     where
         T: Sized + DeserializeOwned + Send + Sync,
@@ -363,6 +371,7 @@ impl UnauthenticatedRestClient for Client {
             .map_err(|err| format!("could not deserialize the payload, {}", err))?)
     }
 
+    #[tracing::instrument(skip(self, obj))]
     async fn post_unauthenticated<T, U>(&self, path: &str, obj: &T) -> Result<U, Self::Error>
     where
         T: Sized + Serialize + Send + Sync,
@@ -410,6 +419,7 @@ impl UnauthenticatedRestClient for Client {
 }
 
 impl Client {
+    #[tracing::instrument(skip(self))]
     fn hash(&self, method: &str, path: &str, body: &str, timestamp: i64) -> String {
         let mut hasher = Sha1::new();
 
