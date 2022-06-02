@@ -18,7 +18,7 @@ installation of the rust eco-system.
 
 ```shell
 $ ovhctl -h
-ovhctl 0.1.4
+ovhctl 0.1.8
 Commands parsed from the command line
 
 USAGE:
