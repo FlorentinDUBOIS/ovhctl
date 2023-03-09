@@ -1,13 +1,10 @@
 //! # Command interface
 //!
 //! This module provide all stuffs to interact with the command line
-use std::convert::TryFrom;
-use std::error::Error;
-use std::path::PathBuf;
-use std::sync::Arc;
+use std::{convert::TryFrom, error::Error, path::PathBuf, sync::Arc};
 
 use async_trait::async_trait;
-use clap::{Parser, Subcommand};
+use clap::{ArgAction, Parser, Subcommand};
 use ipnetwork::IpNetwork;
 
 use crate::cfg::Configuration;
@@ -428,7 +425,7 @@ async fn connect(config: Arc<Configuration>) -> Result<(), Box<dyn Error + Send 
 #[clap(author, version, about)]
 pub struct Args {
     /// Increase log verbosity
-    #[clap(short = 'v', global = true, parse(from_occurrences))]
+    #[clap(short = 'v', global = true, action = ArgAction::Count)]
     pub verbose: usize,
 
     /// Validate the configuration

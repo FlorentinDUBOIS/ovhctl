@@ -44,8 +44,7 @@ impl From<std::io::Error> for Error {
 // entrypoint
 
 #[paw::main]
-#[tokio::main]
-#[tracing::instrument]
+#[tokio::main(flavor = "current_thread")]
 async fn main(args: Args) -> Result<(), Error> {
     logging::initialize(args.verbose).map_err(Error::LoggingSystem)?;
     let config = match args.config.to_owned() {
