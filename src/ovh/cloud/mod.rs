@@ -8,8 +8,8 @@ use prettytable::{Cell, Row, Table};
 use serde::{Deserialize, Serialize};
 
 use crate::cmd::fmt::{Short, Wide};
-use crate::lib::types;
 use crate::ovh::{Client, RestClient};
+use crate::util::types;
 
 pub mod loadbalancer;
 

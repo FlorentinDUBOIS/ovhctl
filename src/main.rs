@@ -13,7 +13,7 @@ use crate::{
 // library module should be declare first as it expose macros used by other modules
 // https://doc.rust-lang.org/1.2.0/book/macros.html#scoping-and-macro-import/export
 #[macro_use]
-mod lib;
+mod util;
 mod cfg;
 mod cmd;
 pub mod logging;
