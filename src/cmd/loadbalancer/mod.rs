@@ -6,9 +6,9 @@ use std::sync::Arc;
 
 use crate::cfg::Configuration;
 use crate::cmd::fmt::{Formatter, Json, Kind, Short, Wide, Yaml};
-use crate::lib::types;
 use crate::ovh::cloud::loadbalancer;
 use crate::ovh::{Client, ClientConfiguration};
+use crate::util::types;
 
 #[tracing::instrument]
 pub async fn list(config: Arc<Configuration>, output: &Kind, tenant: &str) -> types::Result<()> {

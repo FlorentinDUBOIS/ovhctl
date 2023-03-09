@@ -1,4 +1,4 @@
-//! # Library module
+//! # Utility module
 //!
 //! This module export all stuff that you could need
 

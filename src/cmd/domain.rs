@@ -10,12 +10,12 @@ use tracing::info;
 
 use crate::cfg::Configuration;
 use crate::cmd::fmt::{Formatter, Json, Kind, Short, Wide, Yaml};
-use crate::lib::net;
-use crate::lib::types::Result;
 use crate::ovh::cloud::{list_instances, list_tenants};
 use crate::ovh::domain::Record;
 use crate::ovh::{domain, RestClient};
 use crate::ovh::{Client, ClientConfiguration};
+use crate::util::net;
+use crate::util::types::Result;
 
 #[tracing::instrument]
 pub async fn list_zones(config: Arc<Configuration>, output: &Kind) -> Result<()> {
