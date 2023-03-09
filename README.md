@@ -12,13 +12,13 @@ $ cargo install --git https://github.com/FlorentinDUBOIS/ovhctl.git
 ```
 
 This will put the binary in the directory `$HOME/.cargo/bin`, if you use the default
-installation of the rust eco-system. 
+installation of the rust ecosystem. 
 
 ## Usage
 
 ```shell
 $ ovhctl -h
-ovhctl 0.1.8
+ovhctl 0.1.9
 Commands parsed from the command line
 
 USAGE:
