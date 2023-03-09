@@ -29,7 +29,7 @@ pub enum Error {
     #[error("failed to load configuration, {0}")]
     Configuration(Box<dyn StdError + Send + Sync>),
     #[error("failed to execute command, {0}")]
-    Comand(Box<dyn StdError + Send + Sync>),
+    Command(Box<dyn StdError + Send + Sync>),
     #[error("failed to parse arguments, {0}")]
     ParseArgs(std::io::Error),
 }
@@ -77,7 +77,7 @@ async fn main(args: Args) -> Result<(), Error> {
     if let Some(cmd) = args.cmd {
         if let Err(err) = cmd.execute(config).await {
             error!("could not execute command, {}", err);
-            return Err(Error::Comand(err));
+            return Err(Error::Command(err));
         }
     }
 
